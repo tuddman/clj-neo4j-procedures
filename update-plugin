@@ -1,0 +1,18 @@
+#!/bin/sh
+## convenience script to 'load' version updates into Neo4j/plugins 
+## 
+## pass as an argument the path to your Neo4j install directory
+
+NEO4J_HOME="$1"
+
+PLUGIN_NAME=clj-neo4j-procedures.jar
+
+CWD=$(pwd)
+
+lein uberjar
+
+cd $1/bin && ./neo4j stop
+
+(cd $CWD && cp target/$PLUGIN_NAME $1/plugins)
+
+cd $1/bin && ./neo4j start

@@ -20,7 +20,7 @@ By exposing User-Defined Procedures & Functions to being able to be called from 
 
 **WARNING**  _EXPERIMENTAL_
 
-definitely **NOT** ready yet for primetime production usage
+definitely **NOT** ready yet for production usage
 
 ## Usage
 
@@ -37,27 +37,6 @@ CALL myplugin.myprocedure() YIELD ...
 RETURN myplugin.myfunction() AS ...  
 ```
 
-
-#### Casting to Neo4J recognized types:
-
-When declaring the input type hinting, the argument type must be, or must coerce to, one of the following:
-
-`boolean`, `java.lang.Boolean`, `double`, `java.lang.Double`, `java.lang.Long`, `java.lang.Number`, `java.lang.Object`, `java.lang.String`, `java.util.List`, `java.util.Map`, `long`, `org.neo4j.graphdb.Node`, `org.neo4j.graphdb.Path`, `org.neo4j.graphdb.Relationship`, `org.neo4j.graphdb.spatial.Geometry`, `org.neo4j.graphdb.spatial.Point`
-
-
-Neo4j Stored Procedures produce [Streams](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html) of records. When declaring the record output type, each record must return a declared class containing, or before returning must coerce into, one (or more) of the following public non-final field types:
-
-`String`, `Long`, `Double`, `Number`, `Boolean`, `org.neo4j.graphdb.Node`, `org.neo4j.graphdb.Relationship`, `org.neo4j.graphdb.Path`
-`java.util.Map` with key `String` and value `Object`,
-`java.util.List` of elements of any valid field type, including  `java.util.List`,
-`Object` - meaning any of the valid field types
-
-
-####
-
-Procedures can have a few [modes](https://neo4j.com/docs/java-reference/3.1/javadocs/index.html?org/neo4j/procedure/Procedure.html)
-
-`DBMS` `DEFAULT` `READ` `WRITE` `SCHEMA`
 
 
 ## Credit

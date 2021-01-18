@@ -96,8 +96,127 @@ Failed to invoke function `clj_neo4j_procedures.functions.numberOfNodes`: Caused
     (.getMethod clj_neo4j_procedures.functions.neo4j-user-function "foo" nil)))
 ```
 
+
+
+
+#### Casting to Neo4J recognized types:
+
+[reference](https://neo4j.com/docs/java-reference/current/extending-neo4j/procedures-and-functions/values-and-types/)
+
+When declaring the input type hinting, the argument type must be, or must coerce to, one of the following:
+
+`boolean`, `java.lang.Boolean`, `double`, `java.lang.Double`, `java.lang.Long`, `java.lang.Number`, `java.lang.Object`, `java.lang.String`, `java.util.List`, `java.util.Map`, `long`, `org.neo4j.graphdb.Node`, `org.neo4j.graphdb.Path`, `org.neo4j.graphdb.Relationship`, `org.neo4j.graphdb.spatial.Geometry`, `org.neo4j.graphdb.spatial.Point`
+
+
+Neo4j Stored Procedures produce [Streams](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html) of records. When declaring the record output type, each record must return a declared class containing, or before returning must coerce into, one (or more) of the following public non-final field types:
+
+`String`, `Long`, `Double`, `Number`, `Boolean`, `org.neo4j.graphdb.Node`, `org.neo4j.graphdb.Relationship`, `org.neo4j.graphdb.Path`
+`java.util.Map` with key `String` and value `Object`,
+  `java.util.List` of elements of any valid field type, including  `java.util.List`,
+  `Object` - meaning any of the valid field types
+
+
+####
+
+  Procedures can have a few [modes](https://neo4j.com/docs/java-reference/3.1/javadocs/index.html?org/neo4j/procedure/Procedure.html)
+
+  `DBMS` `DEFAULT` `READ` `WRITE` `SCHEMA`
+
+
+
+
 ### TODO
 
 * make this a lein template
 
 
+
+
+## Scratch
+
+```clojure
+
+;; User Defined Procedures
+
+(definterface INeo4jProcedure
+ (findDenseNodes [^Number threshold] "clojure docstring for findDenseNodes goes here"))
+
+#_(defn ^Stream -findDenseNodes
+    [this db threshold]
+    (Stream/of (map #(CljObjectResult. %) (^java.util.stream.Stream .stream (.getAllNodes db)))))
+
+#_(deftype
+    neo4j-procedure []
+    INeo4jProcedure
+    (^{Procedure {:mode "READ"}
+     Description "Finds all nodes in the database with more relationships than the specified threshold."}
+     findDenseNodes
+     [this ^{Name {:value "threshold"}} threshold]
+     (require 'clj-neo4j-procedures.procedures)
+     (-findDenseNodes this threshold)))
+
+
+
+#_(defrecord CljObjectResult [^java.lang.Object obj])
+
+
+#_(defn returnStream
+    [n]
+    (-> n
+     ; (doto  (java.util.ArrayList.)  (.add 1)  (.add 2))
+     (.stream)
+#_(.flatMap  (reify java.util.function.Function  (apply  [_ arg]  (->CljObjectResult arg))))
+#_(.collect  (java.util.stream.Collectors/toList))))
+
+#_(defn retStream
+    [n]
+    (-> n
+     (.stream)
+     ;        .iterator
+#_(StreamSupport/stream false)))
+
+    ; (type %1)
+    ; => java.util.stream.ReferencePipeline$3
+    (comment 
+     (->  
+      (doto (java.util.ArrayList.) (.add 1) (.add 2))  
+      (.stream)  
+      (.map (reify java.util.function.Function (apply [_ arg] (inc arg))))  
+      (.collect  (java.util.stream.Collectors/toList))))
+ 
+
+
+;;  User defined Functions
+
+  (definterface INeo4jUserFunction
+   (^long foo [])
+   (^double add42 [^double number])
+   (numberOfNodes []))
+
+  (defn -add42
+   [number]
+   (+ number 42))
+
+
+  ;; Example of Neo4j User Defined Functions
+
+  (deftype neo4j-user-function []  
+   INeo4jUserFunction
+
+   (^{UserFunction {} Description "a straighforward description example for foo"} foo [this] 42)
+
+   (^{UserFunction {} Description "a good description for add42 is that it adds 42 to a number"}
+    add42
+    [this ^{Name {:value "number"}} number]
+    (require 'clj-neo4j-procedures.functions)  ;; 'require' this namespace to be able to 'call out' to other functions defined within this (or another) namespace.
+    (-add42 number))
+
+   (^{UserFunction {} Description "get the number of nodes in the DB"}
+    numberOfNodes
+    [this]
+    (require 'clj-neo4j-procedures.functions)  
+    (-numberOfNodes this)))
+
+
+
+```
