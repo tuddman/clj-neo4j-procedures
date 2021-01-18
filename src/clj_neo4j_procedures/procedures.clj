@@ -2,7 +2,3 @@
   (:import [org.neo4j.procedure Context Description Name Procedure]
            [org.neo4j.graphdb GraphDatabaseService Label Node Relationship]
            [java.util.stream Stream StreamSupport]))
-
-;; Example of Neo4j Stored Procedures 
-
-

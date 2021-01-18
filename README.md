@@ -2,13 +2,7 @@
 
 Neo4j Stored Procedures + Functions implemented in Clojure
 
-#### User-Defined Procedures
-
-see `src/clj-neo4j-procedures/procedures.clj` for examples of user-defined stored procedures
-
-#### User-Defined Functions
-
-see `src/clj-neo4j-procedures/functions.clj` for examples of user-defined functions
+see `example/` folder  for examples of user-defined stored procedures, functions and aggregation functions.
 
 ## Why?
 

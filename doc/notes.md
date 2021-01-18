@@ -12,7 +12,7 @@
 * some note about [ReferencePipeline](http://stackoverflow.com/questions/24196082/what-is-the-default-implementation-of-stream-in-java-8#comment48934957_24203010) being the only type of abstract implementation of stream, actually.
 * [function with @Context db](https://github.com/neo4j-contrib/neo4j-apoc-procedures/blob/3.1/src/main/java/apoc/map/Maps.java#L55)
 * [SO comment on meta ^tags](http://stackoverflow.com/questions/6484899/type-hinting-return-value-with-or-tag-meta?rq=1)
-
+* [more SO notes on Annotations](https://stackoverflow.com/questions/15123214/clojure-macro-using-gen-class-doesnt-create-annotations)
 
 #### REPL
 
